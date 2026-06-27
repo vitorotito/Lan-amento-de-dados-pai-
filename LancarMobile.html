@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#16357A">
+<title>Lançar</title>
+<style>
+  :root{ --azul:#2563B9; --azul-esc:#1C4E96; --bg:#16357A; --verde:#16823C; --vermelho:#C13131;
+         --card:#fff; --borda:#D7DEE9; --txt:#26303D; --txt2:#6B7686; }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);min-height:100vh;
+       padding:18px;color:var(--txt)}
+  .wrap{max-width:440px;margin:0 auto}
+  .head{display:flex;align-items:center;gap:10px;color:#fff;margin:6px 2px 16px}
+  .logo{width:34px;height:34px;background:var(--verde);border-radius:9px;display:flex;align-items:center;
+        justify-content:center;font-weight:800;font-size:18px}
+  .head h1{font-size:19px;font-weight:600}
+  .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 6px 22px rgba(0,0,0,.18)}
+  label{display:block;font-size:13px;font-weight:600;color:var(--txt2);margin:14px 2px 6px}
+  label:first-child{margin-top:0}
+  input{width:100%;height:50px;border:1.5px solid var(--borda);border-radius:11px;padding:0 14px;
+        font-size:17px;font-family:inherit;color:var(--txt);background:#fff;outline:none}
+  input:focus{border-color:var(--azul)}
+  .moeda{position:relative}
+  .moeda span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--txt2);font-size:16px}
+  .moeda input{padding-left:42px}
+  .preview{font-size:13.5px;font-weight:600;min-height:20px;margin:12px 2px 0;color:var(--txt2)}
+  button{width:100%;height:54px;border:none;border-radius:13px;background:var(--azul);color:#fff;
+         font-size:17px;font-weight:600;font-family:inherit;margin-top:18px;cursor:pointer;transition:background .15s}
+  button:active{background:var(--azul-esc)}
+  button:disabled{opacity:.6}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);
+         background:#222;color:#fff;padding:13px 20px;border-radius:30px;font-size:14.5px;font-weight:500;
+         transition:transform .3s;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:90%;text-align:center}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast.ok{background:var(--verde)} .toast.err{background:var(--vermelho)}
+  .hint{color:#AFC4F0;font-size:12px;text-align:center;margin-top:14px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head"><div class="logo">$</div><h1>Novo Lançamento</h1></div>
+    <div class="card">
+      <label>Data</label>
+      <input type="date" id="data">
+      <label>Descrição</label>
+      <input type="text" id="desc" list="descricoes" placeholder="Ex.: Mercado" autocomplete="off">
+      <datalist id="descricoes">
+    <option value="Acessório">
+    <option value="Ajuda de custo">
+    <option value="Almoço">
+    <option value="Aluguel">
+    <option value="Assinaturas">
+    <option value="Ações">
+    <option value="Besteiras">
+    <option value="Cabelo">
+    <option value="Café da manhã">
+    <option value="Casa">
+    <option value="Churrasco">
+    <option value="Combustivel">
+    <option value="Compra Mercado Livre">
+    <option value="Cursos">
+    <option value="Dividendos">
+    <option value="Dizimo">
+    <option value="Dízimo">
+    <option value="Eletrônicos">
+    <option value="Estacionamento">
+    <option value="Eventos">
+    <option value="Extorno">
+    <option value="Extra">
+    <option value="FII´s">
+    <option value="Facul">
+    <option value="Farmácia">
+    <option value="Fatura">
+    <option value="Hora Extra">
+    <option value="Jogos">
+    <option value="Juros">
+    <option value="Kart">
+    <option value="Lanche">
+    <option value="Lavação">
+    <option value="Luz">
+    <option value="Manut. Carro">
+    <option value="Mecânico">
+    <option value="Mercado">
+    <option value="Microsoft One Drive">
+    <option value="Outros">
+    <option value="Pag. Cartão crédito">
+    <option value="Pc">
+    <option value="Pedágio">
+    <option value="Perfume">
+    <option value="Peças carro">
+    <option value="Pizza">
+    <option value="Projetos">
+    <option value="RU">
+    <option value="Renda Extra">
+    <option value="Renda Fixa">
+    <option value="Restaurante">
+    <option value="Retiro">
+    <option value="Roupa">
+    <option value="Saldo Inicial">
+    <option value="Salário">
+    <option value="Saída">
+    <option value="Softwares">
+    <option value="Sorvete">
+    <option value="Tênis">
+    <option value="Venda">
+    <option value="Venda de ação">
+    <option value="Volêi">
+    <option value="Água">
+      </datalist>
+      <label>Valor</label>
+      <div class="moeda"><span>R$</span><input type="text" id="valor" inputmode="decimal" placeholder="0,00"></div>
+      <div class="preview" id="prev"></div>
+      <button id="btn">Adicionar lançamento</button>
+    </div>
+    <div class="hint">Os lançamentos entram na sua planilha quando você tocar em "Sincronizar" no Excel.</div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script>
+  // ====== CONFIGURE AQUI (1 linha) ======
+  const SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+  const TOKEN = "COLE_AQUI_O_SEU_TOKEN";
+  // ======================================
+
+  const $ = id => document.getElementById(id);
+  // data padrao = hoje
+  (function(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); $('data').value=d.toISOString().slice(0,10); })();
+
+  function toast(msg, tipo){ const t=$('toast'); t.textContent=msg; t.className='toast show '+(tipo||'');
+    setTimeout(()=>t.className='toast '+(tipo||''), 2600); }
+
+  function parseValor(s){ s=(s||'').trim().replace(/\./g,'').replace(',','.'); const v=parseFloat(s); return isNaN(v)?0:v; }
+
+  $('valor').addEventListener('input',()=>{ const v=parseValor($('valor').value);
+    $('prev').textContent = v>0 ? ('Valor: R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2})) : ''; });
+
+  $('btn').addEventListener('click', async ()=>{
+    const data=$('data').value, desc=$('desc').value.trim(), valor=parseValor($('valor').value);
+    if(!data){ toast('Escolha a data','err'); return; }
+    if(!desc){ toast('Digite a descrição','err'); return; }
+    if(valor<=0){ toast('Digite um valor válido','err'); return; }
+
+    $('btn').disabled=true; $('btn').textContent='Enviando...';
+    try{
+      await fetch(SCRIPT_URL,{ method:'POST', redirect:'follow',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({token:TOKEN, data:data, descricao:desc, valor:valor}) });
+      toast('✓ Lançado: '+desc,'ok');
+      $('desc').value=''; $('valor').value=''; $('prev').textContent=''; $('desc').focus();
+    }catch(err){
+      toast('Erro de conexão. Tente de novo.','err');
+    }finally{ $('btn').disabled=false; $('btn').textContent='Adicionar lançamento'; }
+  });
+</script>
+</body>
+</html>
