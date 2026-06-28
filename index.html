@@ -9,150 +9,250 @@
   :root{ --azul:#2563B9; --azul-esc:#1C4E96; --bg:#16357A; --verde:#16823C; --vermelho:#C13131;
          --card:#fff; --borda:#D7DEE9; --txt:#26303D; --txt2:#6B7686; }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);min-height:100vh;
-       padding:18px;color:var(--txt)}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);
+       min-height:100vh;padding:18px;color:var(--txt)}
   .wrap{max-width:440px;margin:0 auto}
   .head{display:flex;align-items:center;gap:10px;color:#fff;margin:6px 2px 16px}
-  .logo{width:34px;height:34px;background:var(--verde);border-radius:9px;display:flex;align-items:center;
-        justify-content:center;font-weight:800;font-size:18px}
+  .logo{width:34px;height:34px;background:var(--verde);border-radius:9px;display:flex;
+        align-items:center;justify-content:center;font-weight:800;font-size:18px}
   .head h1{font-size:19px;font-weight:600}
-  .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 6px 22px rgba(0,0,0,.18)}
+  .card{background:var(--card);border-radius:16px;padding:18px;
+        box-shadow:0 6px 22px rgba(0,0,0,.18)}
   label{display:block;font-size:13px;font-weight:600;color:var(--txt2);margin:14px 2px 6px}
   label:first-child{margin-top:0}
-  input{width:100%;height:50px;border:1.5px solid var(--borda);border-radius:11px;padding:0 14px;
-        font-size:17px;font-family:inherit;color:var(--txt);background:#fff;outline:none}
+  input[type=date],input[type=text]{width:100%;height:50px;border:1.5px solid var(--borda);
+        border-radius:11px;padding:0 14px;font-size:17px;font-family:inherit;
+        color:var(--txt);background:#fff;outline:none;appearance:none}
   input:focus{border-color:var(--azul)}
+
+  /* ---- campo de busca de descricao ---- */
+  .desc-wrap{position:relative}
+  .desc-input-row{display:flex;gap:0;position:relative}
+  #descSearch{flex:1;border-radius:11px 0 0 11px;border-right:none}
+  #descSearch.ok{border-color:var(--verde);background:#F0FAF4}
+  #descSearch.err{border-color:var(--vermelho);background:#FEF0F0}
+  .desc-clear{width:44px;height:50px;border:1.5px solid var(--borda);border-left:none;
+              border-radius:0 11px 11px 0;background:#F7F9FC;color:var(--txt2);
+              font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .desc-hint{font-size:12px;margin:5px 2px 0;min-height:16px;font-weight:500}
+  .desc-hint.ok{color:var(--verde)} .desc-hint.err{color:var(--vermelho)}
+  .desc-hint.info{color:var(--txt2)}
+
+  .drop{position:absolute;top:54px;left:0;right:0;background:#fff;border:1.5px solid var(--azul);
+        border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:220px;
+        overflow-y:auto;z-index:100;display:none}
+  .drop.open{display:block}
+  .drop-item{padding:13px 14px;font-size:16px;cursor:pointer;border-bottom:1px solid #F0F3F8}
+  .drop-item:last-child{border-bottom:none}
+  .drop-item:active,.drop-item.hover{background:var(--azul);color:#fff}
+  .drop-item em{font-style:normal;font-weight:700}
+  .drop-empty{padding:14px;color:var(--txt2);font-size:14px;text-align:center}
+
+  /* ---- valor ---- */
   .moeda{position:relative}
-  .moeda span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--txt2);font-size:16px}
+  .moeda span{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+              color:var(--txt2);font-size:16px}
   .moeda input{padding-left:42px}
   .preview{font-size:13.5px;font-weight:600;min-height:20px;margin:12px 2px 0;color:var(--txt2)}
-  button{width:100%;height:54px;border:none;border-radius:13px;background:var(--azul);color:#fff;
-         font-size:17px;font-weight:600;font-family:inherit;margin-top:18px;cursor:pointer;transition:background .15s}
+
+  button{width:100%;height:54px;border:none;border-radius:13px;background:var(--azul);
+         color:#fff;font-size:17px;font-weight:600;font-family:inherit;margin-top:18px;
+         cursor:pointer;transition:background .15s}
   button:active{background:var(--azul-esc)}
   button:disabled{opacity:.6}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);
-         background:#222;color:#fff;padding:13px 20px;border-radius:30px;font-size:14.5px;font-weight:500;
-         transition:transform .3s;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:90%;text-align:center}
+         background:#222;color:#fff;padding:13px 20px;border-radius:30px;font-size:14.5px;
+         font-weight:500;transition:transform .3s;box-shadow:0 6px 20px rgba(0,0,0,.3);
+         max-width:90%;text-align:center}
   .toast.show{transform:translateX(-50%) translateY(0)}
   .toast.ok{background:var(--verde)} .toast.err{background:var(--vermelho)}
   .hint{color:#AFC4F0;font-size:12px;text-align:center;margin-top:14px}
+  .sync-info{color:#AFC4F0;font-size:11px;text-align:center;margin-top:4px}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="head"><div class="logo">$</div><h1>Novo Lançamento</h1></div>
-    <div class="card">
-      <label>Data</label>
-      <input type="date" id="data">
-      <label>Descrição</label>
-      <input type="text" id="desc" list="descricoes" placeholder="Ex.: Mercado" autocomplete="off">
-      <datalist id="descricoes">
-    <option value="Acessório">
-    <option value="Ajuda de custo">
-    <option value="Almoço">
-    <option value="Aluguel">
-    <option value="Assinaturas">
-    <option value="Ações">
-    <option value="Besteiras">
-    <option value="Cabelo">
-    <option value="Café da manhã">
-    <option value="Casa">
-    <option value="Churrasco">
-    <option value="Combustivel">
-    <option value="Compra Mercado Livre">
-    <option value="Cursos">
-    <option value="Dividendos">
-    <option value="Dizimo">
-    <option value="Dízimo">
-    <option value="Eletrônicos">
-    <option value="Estacionamento">
-    <option value="Eventos">
-    <option value="Extorno">
-    <option value="Extra">
-    <option value="FII´s">
-    <option value="Facul">
-    <option value="Farmácia">
-    <option value="Fatura">
-    <option value="Hora Extra">
-    <option value="Jogos">
-    <option value="Juros">
-    <option value="Kart">
-    <option value="Lanche">
-    <option value="Lavação">
-    <option value="Luz">
-    <option value="Manut. Carro">
-    <option value="Mecânico">
-    <option value="Mercado">
-    <option value="Microsoft One Drive">
-    <option value="Outros">
-    <option value="Pag. Cartão crédito">
-    <option value="Pc">
-    <option value="Pedágio">
-    <option value="Perfume">
-    <option value="Peças carro">
-    <option value="Pizza">
-    <option value="Projetos">
-    <option value="RU">
-    <option value="Renda Extra">
-    <option value="Renda Fixa">
-    <option value="Restaurante">
-    <option value="Retiro">
-    <option value="Roupa">
-    <option value="Saldo Inicial">
-    <option value="Salário">
-    <option value="Saída">
-    <option value="Softwares">
-    <option value="Sorvete">
-    <option value="Tênis">
-    <option value="Venda">
-    <option value="Venda de ação">
-    <option value="Volêi">
-    <option value="Água">
-      </datalist>
-      <label>Valor</label>
-      <div class="moeda"><span>R$</span><input type="text" id="valor" inputmode="decimal" placeholder="0,00"></div>
-      <div class="preview" id="prev"></div>
-      <button id="btn">Adicionar lançamento</button>
+<div class="wrap">
+  <div class="head"><div class="logo">$</div><h1>Novo Lançamento</h1></div>
+  <div class="card">
+    <label>Data</label>
+    <input type="date" id="data">
+
+    <label>Descrição</label>
+    <div class="desc-wrap">
+      <div class="desc-input-row">
+        <input type="text" id="descSearch" placeholder="Buscar descrição..." autocomplete="off"
+               autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="desc-clear" id="descClear">&#x2715;</div>
+      </div>
+      <div class="desc-hint info" id="descHint">Digite para buscar</div>
+      <div class="drop" id="drop"></div>
     </div>
-    <div class="hint">Os lançamentos entram na sua planilha quando você tocar em "Sincronizar" no Excel.</div>
+    <input type="hidden" id="descVal">
+
+    <label>Valor</label>
+    <div class="moeda">
+      <span>R$</span>
+      <input type="text" id="valor" inputmode="decimal" placeholder="0,00">
+    </div>
+    <div class="preview" id="prev"></div>
+    <button id="btn">Adicionar lançamento</button>
   </div>
-  <div class="toast" id="toast"></div>
+  <div class="hint">Os lançamentos entram na planilha quando você tocar em "Sincronizar" no Excel.</div>
+  <div class="sync-info" id="syncInfo"></div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>
-  // ====== CONFIGURE AQUI (1 linha) ======
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3-oNEa1W8ch808RqIBn0txDKvh9QcMlVE25Aw5dkiLUko1a1Nc77W0NIWWCVEfdnfuw/exec";
-  const TOKEN = "3080";
-  // ======================================
+// ====== CONFIGURE AQUI ======
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3-oNEa1W8ch808RqIBn0txDKvh9QcMlVE25Aw5dkiLUko1a1Nc77W0NIWWCVEfdnfuw/exec";
+const TOKEN      = "3080";
+// ============================
 
-  const $ = id => document.getElementById(id);
-  // data padrao = hoje
-  (function(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); $('data').value=d.toISOString().slice(0,10); })();
+// lista embutida (fallback offline)
+let LISTA = ["Acessório", "Ajuda de custo", "Almoço", "Aluguel", "Assinaturas", "Ações", "Besteiras", "Cabelo", "Café da manhã", "Casa", "Churrasco", "Combustivel", "Compra Mercado Livre", "Cursos", "Dividendos", "Dizimo", "Dízimo", "Eletrônicos", "Estacionamento", "Eventos", "Extorno", "Extra", "FII´s", "Facul", "Farmácia", "Fatura", "Hora Extra", "Jogos", "Juros", "Kart", "Lanche", "Lavação", "Luz", "Manut. Carro", "Mecânico", "Mercado", "Microsoft One Drive", "Outros", "Pag. Cartão crédito", "Pc", "Pedágio", "Perfume", "Peças carro", "Pizza", "Projetos", "RU", "Renda Extra", "Renda Fixa", "Restaurante", "Retiro", "Roupa", "Saldo Inicial", "Salário", "Saída", "Softwares", "Sorvete", "Tênis", "Venda", "Venda de ação", "Volêi", "Água"];
 
-  function toast(msg, tipo){ const t=$('toast'); t.textContent=msg; t.className='toast show '+(tipo||'');
-    setTimeout(()=>t.className='toast '+(tipo||''), 2600); }
+const $id = id => document.getElementById(id);
+const toast = (msg, tipo) => {
+  const t=$id('toast'); t.textContent=msg;
+  t.className='toast show '+(tipo||'');
+  setTimeout(()=>t.className='toast '+(tipo||''), 2600);
+};
+const parseValor = s => {
+  s=(s||'').trim().replace(/\./g,'').replace(',','.');
+  const v=parseFloat(s); return isNaN(v)?0:v;
+};
 
-  function parseValor(s){ s=(s||'').trim().replace(/\./g,'').replace(',','.'); const v=parseFloat(s); return isNaN(v)?0:v; }
+// data padrao = hoje
+(()=>{ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); $id('data').value=d.toISOString().slice(0,10); })();
 
-  $('valor').addEventListener('input',()=>{ const v=parseValor($('valor').value);
-    $('prev').textContent = v>0 ? ('Valor: R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2})) : ''; });
+// ---- busca descricoes no servidor ----
+async function carregarDescricoes() {
+  try {
+    const r = await fetch(SCRIPT_URL+'?token='+TOKEN+'&tipo=descricoes', {redirect:'follow'});
+    const txt = await r.text();
+    if (!txt || txt.startsWith('ERRO')) return;
+    const nova = txt.split('\n').map(s=>s.trim()).filter(Boolean);
+    if (nova.length) { LISTA = nova; $id('syncInfo').textContent='Descrições atualizadas ('+nova.length+')'; }
+  } catch(e) {}
+}
+carregarDescricoes();
 
-  $('btn').addEventListener('click', async ()=>{
-    const data=$('data').value, desc=$('desc').value.trim(), valor=parseValor($('valor').value);
-    if(!data){ toast('Escolha a data','err'); return; }
-    if(!desc){ toast('Digite a descrição','err'); return; }
-    if(valor<=0){ toast('Digite um valor válido','err'); return; }
+// ---- dropdown de busca ----
+const searchEl  = $id('descSearch');
+const dropEl    = $id('drop');
+const descVal   = $id('descVal');
+const descHint  = $id('descHint');
+const descClear = $id('descClear');
 
-    $('btn').disabled=true; $('btn').textContent='Enviando...';
-    try{
-      await fetch(SCRIPT_URL,{ method:'POST', redirect:'follow',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({token:TOKEN, data:data, descricao:desc, valor:valor}) });
-      toast('✓ Lançado: '+desc,'ok');
-      $('desc').value=''; $('valor').value=''; $('prev').textContent=''; $('desc').focus();
-    }catch(err){
-      toast('Erro de conexão. Tente de novo.','err');
-    }finally{ $('btn').disabled=false; $('btn').textContent='Adicionar lançamento'; }
-  });
+function normaliza(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+
+function highlight(txt, q){
+  if (!q) return txt;
+  const re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')', 'gi');
+  return txt.replace(re,'<em>$1</em>');
+}
+
+function renderDrop(q){
+  const nq = normaliza(q||'');
+  const fil = q ? LISTA.filter(d=>normaliza(d).includes(nq)) : LISTA;
+  if (!fil.length){
+    dropEl.innerHTML='<div class="drop-empty">Nenhuma descrição encontrada</div>';
+  } else {
+    dropEl.innerHTML = fil.slice(0,30).map(d=>
+      '<div class="drop-item" data-v="'+d.replace(/"/g,'&quot;')+'">'+highlight(d,q)+'</div>'
+    ).join('');
+    dropEl.querySelectorAll('.drop-item').forEach(el=>{
+      el.addEventListener('mousedown', e=>{ e.preventDefault(); selecionarItem(el.dataset.v); });
+      el.addEventListener('touchstart', e=>{ e.preventDefault(); selecionarItem(el.dataset.v); }, {passive:false});
+    });
+  }
+  dropEl.classList.add('open');
+}
+
+function selecionarItem(v){
+  searchEl.value = v;
+  descVal.value  = v;
+  dropEl.classList.remove('open');
+  descHint.className = 'desc-hint ok';
+  descHint.textContent = '✓ Cadastrada';
+  searchEl.className = 'ok';
+}
+
+function limparDesc(){
+  searchEl.value=''; descVal.value='';
+  searchEl.className='';
+  descHint.className='desc-hint info'; descHint.textContent='Digite para buscar';
+  dropEl.classList.remove('open');
+  searchEl.focus();
+}
+
+searchEl.addEventListener('focus', ()=>{ renderDrop(searchEl.value); });
+searchEl.addEventListener('input', ()=>{
+  descVal.value='';
+  searchEl.className='';
+  descHint.className='desc-hint info'; descHint.textContent='';
+  renderDrop(searchEl.value);
+});
+searchEl.addEventListener('blur', ()=>{
+  setTimeout(()=>dropEl.classList.remove('open'), 150);
+  // valida se o que esta escrito bate com alguma opcao
+  if (searchEl.value && !descVal.value){
+    const match = LISTA.find(d=>d.toLowerCase()===searchEl.value.toLowerCase());
+    if (match){ selecionarItem(match); }
+    else {
+      searchEl.className='err';
+      descHint.className='desc-hint err';
+      descHint.textContent='Não cadastrada — use o botão "Nova Categoria" no Excel';
+    }
+  }
+});
+descClear.addEventListener('click', limparDesc);
+descClear.addEventListener('touchstart', e=>{ e.preventDefault(); limparDesc(); }, {passive:false});
+
+// fecha o drop se clicar fora
+document.addEventListener('touchstart', e=>{
+  if (!$id('descSearch').contains(e.target) && !dropEl.contains(e.target))
+    dropEl.classList.remove('open');
+});
+
+// ---- valor ----
+$id('valor').addEventListener('input', ()=>{
+  const v=parseValor($id('valor').value);
+  $id('prev').textContent = v>0 ? 'Valor: R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '';
+});
+
+// ---- enviar ----
+$id('btn').addEventListener('click', async ()=>{
+  const data  = $id('data').value;
+  const desc  = descVal.value.trim();  // so aceita o que foi selecionado da lista
+  const valor = parseValor($id('valor').value);
+
+  if (!data)  { toast('Escolha a data','err'); return; }
+  if (!desc)  {
+    if (searchEl.value.trim()){
+      searchEl.className='err';
+      descHint.className='desc-hint err';
+      descHint.textContent='Selecione uma opção da lista';
+    }
+    toast('Selecione uma descrição da lista','err'); return;
+  }
+  if (valor<=0){ toast('Digite um valor válido','err'); return; }
+
+  $id('btn').disabled=true; $id('btn').textContent='Enviando...';
+  try {
+    await fetch(SCRIPT_URL,{ method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({token:TOKEN, data:data, descricao:desc, valor:valor})
+    });
+    toast('\u2713 Lançado: '+desc,'ok');
+    limparDesc(); $id('valor').value=''; $id('prev').textContent='';
+    searchEl.focus();
+  } catch(err) {
+    toast('Erro de conexão. Tente de novo.','err');
+  } finally {
+    $id('btn').disabled=false; $id('btn').textContent='Adicionar lançamento';
+  }
+});
 </script>
 </body>
 </html>
